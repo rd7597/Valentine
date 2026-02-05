@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Priya ❤️ My Valentine</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,#ff5f8f,#ff9aa2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Segoe UI',sans-serif;
+  padding:20px;
+  overflow:hidden;
+}
+
+.card{
+  background:white;
+  padding:28px;
+  border-radius:28px;
+  text-align:center;
+  box-shadow:0 25px 50px rgba(0,0,0,0.25);
+  width:100%;
+  max-width:430px;
+  position:relative;
+  z-index:5;
+}
+
+/* Slideshow */
+.slideshow{
+  width:100%;
+  height:270px;
+  border-radius:22px;
+  overflow:hidden;
+  margin-bottom:18px;
+  background:#f2f2f2;
+}
+
+.slideshow img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:none;
+  cursor:pointer;
+}
+
+.slideshow img.active{display:block;}
+
+h1{
+  color:#ff4b6e;
+  font-size:26px;
+  margin:10px 0 18px;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+}
+
+button{
+  padding:13px 30px;
+  font-size:16px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+}
+
+#yesBtn{
+  background:#ff4b6e;
+  color:white;
+  box-shadow:0 8px 20px rgba(255,75,110,.4);
+}
+
+#noBtn{
+  background:#e0e0e0;
+  position:relative;
+}
+
+/* Message */
+#message{
+  display:none;
+  font-size:17px;
+  color:#444;
+  margin-top:18px;
+  line-height:1.7;
+  white-space:pre-line;
+}
+
+/* Floating hearts */
+.float{
+  position:fixed;
+  bottom:-25px;
+  font-size:22px;
+  animation:floatUp 6s linear infinite;
+  pointer-events:none;
+  z-index:2;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:1;}
+  to{transform:translateY(-130vh);opacity:0;}
+}
+
+/* Fireworks */
+.firework{
+  position:fixed;
+  width:6px;
+  height:6px;
+  background:gold;
+  border-radius:50%;
+  animation:explode 1s ease-out forwards;
+  z-index:1;
+}
+
+@keyframes explode{
+  to{
+    transform:translate(
+      calc(-100px + 200px * var(--x)),
+      calc(-100px + 200px * var(--y))
+    );
+    opacity:0;
+  }
+}
+
+/* Final proposal screen */
+#finalScreen{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#ff5f8f,#ff99ac);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  font-size:30px;
+  text-align:center;
+  z-index:10;
+  padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Romantic slow music (autoplay-safe on click) -->
+<audio id="music" preload="auto" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_4c6f1b59df.mp3">
+</audio>
+
+<div class="card" id="card">
+
+  <div class="slideshow">
+    <img src="photos/photo1.jpeg" class="active">
+    <img src="photos/photo2.jpeg">
+    <img src="photos/photo3.jpeg">
+    <img src="photos/photo4.jpeg">
+    <img src="photos/photo5.jpeg">
+    <img src="photos/photo6.jpeg">
+    <img src="photos/photo7.jpeg">
+    <img src="photos/photo8.jpeg">
+    <img src="photos/photo9.jpeg">
+  </div>
+
+  <h1>Priya ❤️<br>Will you be my Valentine?</h1>
+
+  <div class="buttons">
+    <button id="yesBtn">YES 😍</button>
+    <button id="noBtn">NO 🙈</button>
+  </div>
+
+  <div id="message"></div>
+
+</div>
+
+<!-- Final proposal -->
+<div id="finalScreen">
+  💍 Priya ❤️<br><br>
+  Will you stay with me<br>
+  today, tomorrow<br>
+  and forever? 💖
+</div>
+
+<script>
+/* NO button runs only on hover */
+const noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseenter",()=>{
+  noBtn.style.transform=
+   `translate(${Math.random()*140-70}px,${Math.random()*120-60}px)`;
+});
+
+/* Slideshow */
+let idx=0;
+const slides=document.querySelectorAll(".slideshow img");
+setInterval(()=>{
+  slides[idx].classList.remove("active");
+  idx=(idx+1)%slides.length;
+  slides[idx].classList.add("active");
+},2600);
+
+/* Photo zoom on tap */
+slides.forEach(img=>{
+  img.addEventListener("click",()=>{
+    img.style.transform="scale(1.2)";
+    setTimeout(()=>img.style.transform="scale(1)",600);
+  });
+});
+
+/* Fireworks */
+function fireworks(){
+  for(let i=0;i<30;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.style.left=Math.random()*100+"vw";
+    f.style.top=Math.random()*100+"vh";
+    f.style.setProperty("--x",Math.random());
+    f.style.setProperty("--y",Math.random());
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  }
+}
+
+/* Floating hearts */
+function floatEmoji(symbol){
+  setInterval(()=>{
+    const e=document.createElement("div");
+    e.className="float";
+    e.innerHTML=symbol;
+    e.style.left=Math.random()*100+"vw";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),6000);
+  },450);
+}
+
+/* YES click */
+document.getElementById("yesBtn").onclick=()=>{
+  const music=document.getElementById("music");
+  music.volume=0.5;
+  music.play().catch(()=>{});
+
+  document.getElementById("message").style.display="block";
+  document.getElementById("message").innerText=
+`Priya ❤️
+
+Tum meri zindagi ka
+sabse khoobsurat hissa ho.
+
+Har yaad,
+har pal,
+sirf tumhare naam 💖`;
+
+  floatEmoji("❤️");
+  floatEmoji("🌹");
+
+  fireworks();
+
+  setTimeout(()=>{
+    document.getElementById("finalScreen").style.display="flex";
+  },4500);
+};
+</script>
+
+</body>
+</html>
